@@ -1,0 +1,53 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum JobStatus {
+  pending
+  running
+  completed
+  failed
+}
+
+enum JobItemStatus {
+  pending
+  running
+  success
+  failed
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  count       Int                          // total items requested (e.g. 50)
+  status      JobStatus @default(pending)  // derived/overall status of the batch
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  items       JobItem[]
+
+  @@map("jobs")
+}
+
+model JobItem {
+  id          String        @id @default(cuid())
+  jobId       String
+  job         Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  index       Int                                  // position within the batch, e.g. 0..49
+  status      JobItemStatus @default(pending)
+  attempts    Int           @default(0)            // increments on each retry
+  error       String?                              // error message if failed
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([jobId])
+  @@map("job_items")
+}
