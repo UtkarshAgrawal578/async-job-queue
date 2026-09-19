@@ -20,7 +20,7 @@ A small full-stack system where a user submits a batch job (e.g. "process 50 ite
 
 ### 1. Clone and install
 ```bash
-git clone https://github.com/your-username/async-job-queue.git
+git clone https://github.com/UtkarshAgrawal578/async-job-queue
 cd async-job-queue
 npm install
 ```
