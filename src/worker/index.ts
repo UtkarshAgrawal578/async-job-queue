@@ -1,7 +1,19 @@
+// src/worker/index.ts
+import { createServer } from 'http'
 import { Worker, Job as BullJob } from 'bullmq'
 import { connection } from '../lib/redis'
 import { prisma } from '../lib/db'
 import { QUEUE_NAME, type JobItemPayload } from '../lib/queue'
+
+
+const PORT = process.env.PORT || 3001
+
+createServer((_req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' })
+  res.end('worker is running')
+}).listen(PORT, () => {
+  console.log(`[worker] health-check server listening on port ${PORT}`)
+})
 
 const MIN_DELAY_MS = 1000
 const MAX_DELAY_MS = 5000
