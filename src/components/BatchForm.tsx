@@ -1,3 +1,4 @@
+// src/components/BatchForm.tsx
 'use client'
 
 import { useState } from 'react'
@@ -38,10 +39,10 @@ export function BatchForm({ onJobCreated }: BatchFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-4 max-w-lg">
-      <label className="flex-1 flex flex-col gap-2">
-        <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-          Batch Item Count
+    <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+      <label className="flex flex-col gap-1.5 items-center">
+        <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+          NUMBER OF ITEMS
         </span>
         <input
           type="number"
@@ -49,7 +50,8 @@ export function BatchForm({ onJobCreated }: BatchFormProps) {
           max={500}
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
-          className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+          className="border rounded-xl px-4 py-2.5 w-40 text-center outline-none transition-shadow focus:shadow-md bg-white"
+          style={{ borderColor: 'var(--color-border)' }}
           required
         />
       </label>
@@ -57,20 +59,17 @@ export function BatchForm({ onJobCreated }: BatchFormProps) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-xl px-6 py-3 font-semibold text-sm text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 min-w-[140px]"
+        className="rounded-xl px-6 py-2.5 font-medium text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
+        style={{
+          background: 'linear-gradient(135deg, var(--color-brand), var(--color-brand-dark))',
+          boxShadow: 'var(--shadow-sm)',
+        }}
       >
-        {isSubmitting ? (
-          <>
-            <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-            <span>Submitting</span>
-          </>
-        ) : (
-          <span>Submit Batch →</span>
-        )}
+        {isSubmitting ? 'Submitting...' : 'Submit Batch'}
       </button>
 
       {error && (
-        <p className="text-xs font-medium text-red-400 sm:col-span-2 mt-1">
+        <p className="text-sm" style={{ color: 'var(--color-failed)' }}>
           {error}
         </p>
       )}

@@ -60,25 +60,65 @@ export function JobDashboard({ jobId }: JobDashboardProps) {
   }
 
   if (!job) {
-    return <p style={{ color: 'var(--color-text-muted)' }}>Loading job...</p>
+    return (
+      <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+        <span className="w-3 h-3 rounded-full border-2 border-t-transparent animate-spin"
+              style={{ borderColor: 'var(--color-brand)', borderTopColor: 'transparent' }} />
+        Connecting to live updates...
+      </div>
+    )
   }
 
   const succeeded = job.items.filter((i) => i.status === 'success').length
   const failed = job.items.filter((i) => i.status === 'failed').length
   const completed = succeeded + failed
+  const total = job.items.length
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-5 gap-3">
-        <StatCard label="Total" value={job.items.length} color="var(--color-text)" />
-        <StatCard label="Completed" value={completed} color="var(--color-brand)" />
-        <StatCard label="Succeeded" value={succeeded} color="var(--color-success)" />
-        <StatCard label="Failed" value={failed} color="var(--color-failed)" />
-        <StatCard label="Status" value={job.status} color="var(--color-running)" />
+    <div className="flex flex-col gap-6">
+      {/* Progress bar */}
+      <div>
+        <div className="flex justify-between text-xs mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
+          <span>{pct}% complete</span>
+          <span className="capitalize font-medium" style={{ color: 'var(--color-text)' }}>
+            {job.status}
+          </span>
+        </div>
+        <div
+          className="w-full h-2 rounded-full overflow-hidden"
+          style={{ background: 'var(--color-surface)' }}
+        >
+          <div className="flex h-full transition-all duration-500">
+            <div
+              className="h-full transition-all duration-500"
+              style={{
+                width: `${total > 0 ? (succeeded / total) * 100 : 0}%`,
+                background: 'var(--color-success)',
+              }}
+            />
+            <div
+              className="h-full transition-all duration-500"
+              style={{
+                width: `${total > 0 ? (failed / total) * 100 : 0}%`,
+                background: 'var(--color-failed)',
+              }}
+            />
+          </div>
+        </div>
       </div>
 
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <StatCard label="Total" value={total} icon="▤" color="var(--color-text)" bg="#F1F2F6" />
+        <StatCard label="Succeeded" value={succeeded} icon="✓" color="var(--color-success)" bg="#E8F8F0" />
+        <StatCard label="Failed" value={failed} icon="✕" color="var(--color-failed)" bg="#FDEDEC" />
+        <StatCard label="Remaining" value={total - completed} icon="◐" color="var(--color-running)" bg="#EAF2FE" />
+      </div>
+
+      {/* Item list */}
       <div
-        className="rounded-xl border overflow-hidden"
+        className="rounded-xl border overflow-hidden max-h-[420px] overflow-y-auto"
         style={{ borderColor: 'var(--color-border)' }}
       >
         {job.items.map((item) => (
@@ -92,21 +132,33 @@ export function JobDashboard({ jobId }: JobDashboardProps) {
 function StatCard({
   label,
   value,
+  icon,
   color,
+  bg,
 }: {
   label: string
   value: string | number
+  icon: string
   color: string
+  bg: string
 }) {
   return (
     <div
-      className="rounded-xl border p-3 flex flex-col gap-1"
-      style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+      className="rounded-xl p-4 flex flex-col gap-2 transition-transform hover:-translate-y-0.5"
+      style={{ background: bg, boxShadow: 'var(--shadow-sm)' }}
     >
-      <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        {label}
-      </span>
-      <span className="font-display text-xl font-bold" style={{ color }}>
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+          {label}
+        </span>
+        <span
+          className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+          style={{ background: 'white', color }}
+        >
+          {icon}
+        </span>
+      </div>
+      <span className="font-display text-2xl font-bold" style={{ color }}>
         {value}
       </span>
     </div>

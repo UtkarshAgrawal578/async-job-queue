@@ -1,4 +1,3 @@
-// src/types/index.ts
 import type { Job, JobItem, JobStatus, JobItemStatus } from '@prisma/client'
 
 export type { JobStatus, JobItemStatus }
