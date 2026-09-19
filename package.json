@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
      "worker": "tsx watch --env-file=.env src/worker/index.ts",
-  "start:worker": "tsx --env-file=.env src/worker/index.ts",
+  "start:worker": "tsx src/worker/index.ts",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
   },
