@@ -86,10 +86,9 @@ export function JobHistory({ onSelectJob }: JobHistoryProps) {
               const statusStyle = STATUS_COLORS[job.status] ?? STATUS_COLORS.pending
 
               return (
-                <button
+                <div
                   key={job.id}
-                  onClick={() => onSelectJob(job.id)}
-                  className="w-full flex items-center gap-3 py-3 px-4 border-b last:border-b-0 text-left hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 py-3 px-4 border-b last:border-b-0"
                   style={{ borderColor: 'var(--color-border)' }}
                 >
                   <span
@@ -106,12 +105,20 @@ export function JobHistory({ onSelectJob }: JobHistoryProps) {
                   </span>
 
                   <span
-                    className="ml-auto text-xs"
+                    className="ml-auto text-xs hidden sm:inline"
                     style={{ color: 'var(--color-text-muted)' }}
                   >
                     {new Date(job.createdAt).toLocaleString()}
                   </span>
-                </button>
+
+                  <button
+                    onClick={() => onSelectJob(job.id)}
+                    className="text-xs font-semibold text-white rounded-lg px-3 py-1.5 transition-transform hover:-translate-y-0.5"
+                    style={{ background: 'var(--color-brand)' }}
+                  >
+                    Show Status
+                  </button>
+                </div>
               )
             })}
         </div>
