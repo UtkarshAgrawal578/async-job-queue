@@ -78,8 +78,7 @@ tRPC gives end-to-end type safety, but adds real setup overhead (context, router
 
 ### Why BullMQ?
 
-Simplest queue to stand up for this scope, with a free managed Redis instance (Upstash) requiring no self-hosting — matches what the assignment suggests as the default choice.
-
+Simplest queue to stand up for this scope, with a free managed Redis instance (Upstash) requiring no self-hosting.
 ### Why SSE instead of polling?
 
 "SSE keeps a single open connection per job view instead of repeated HTTP requests from the client. The server only pushes an update when the job's state actually changes, and closes the connection once the batch completes.
